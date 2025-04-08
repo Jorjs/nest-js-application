@@ -1,4 +1,4 @@
-import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import "reflect-metadata"
 import { ValidationPipe } from '@nestjs/common';
@@ -26,7 +26,7 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
-      //forbidNonWhitelisted: true
+      forbidNonWhitelisted: true,
       transform: true,
     }),
   );
