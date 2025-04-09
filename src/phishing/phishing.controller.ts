@@ -7,6 +7,7 @@ import { PhishingService } from './phishing.service';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { ObjectId } from 'mongodb';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('api/phishing')
 @ApiTags('Phishing')
@@ -15,7 +16,8 @@ import { ObjectId } from 'mongodb';
 export class PhishingController {
   constructor(
         private readonly phishingService: PhishingService,
-        private readonly httpService: HttpService
+        private readonly httpService: HttpService,
+        private readonly configService: ConfigService
   ) {}
 
   @HttpCode(HttpStatus.OK)
@@ -43,10 +45,10 @@ export class PhishingController {
   @ApiBody({ type: EmailRequestDto })
   @Post()
   public async sendEmail(@Body() emailDetailsDto: EmailRequestDto): Promise<any> {
-    const url = `http://localhost:5058/api/email`;
+    const url = this.configService.get<string>('EMAIL_API');
 
     const response = await firstValueFrom(
-      this.httpService.post(url, emailDetailsDto)
+      this.httpService.post(url!, emailDetailsDto)
     );
 
     if (response.status === 200) {

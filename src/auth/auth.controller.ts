@@ -3,7 +3,6 @@ import { LoginDto } from 'src/entities/dto/login.request.dto';
 import { RegisterDto } from 'src/entities/dto/register.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { ApiBody, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
 
 @Controller('api/auth')
 export class AuthController {
@@ -11,11 +10,11 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
-    summary: 'Returns a property of substation',
+    summary: 'Login user',
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Property of specified substation'
+    type: LoginDto,
   })
   @Post('/login')
   public async login(@Body() loginInfo: LoginDto): Promise<any> {
@@ -23,11 +22,11 @@ export class AuthController {
   }
 
   @ApiOperation({
-    summary: 'Returns a property of substation',
+    summary: 'Register a user',
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Register a user'
+    type: RegisterDto
   })
   @HttpCode(HttpStatus.OK)
   @ApiBody({type: RegisterDto})

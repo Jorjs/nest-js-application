@@ -3,7 +3,7 @@ import { Exclude, Expose } from "class-transformer";
 
 @Exclude()
 export class AttemptDto {
-    @Expose()
+    @Expose({name: "_id"})
     @ApiProperty()
     id: string;
 

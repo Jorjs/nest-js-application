@@ -21,9 +21,9 @@ import { UsersAttemptsEntity } from './entities/user.attempts.entity';
     }),
     TypeOrmModule.forRoot({
       type: 'mongodb',
-      host: '127.0.0.1',
-      port: 27017,
-      database: 'PhishingDB',
+      host:  process.env.DB_IP,
+      port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : undefined,
+      database: process.env.DB_NAME,
       useUnifiedTopology: true,
       entities: [UserEntity, UsersAttemptsEntity],
       synchronize: true,

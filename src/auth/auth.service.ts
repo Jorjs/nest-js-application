@@ -22,7 +22,7 @@ export class AuthService {
     const user: UserEntity | null = await this.authRepository.findOneByUsername(loginInfo.username);
 
     if (!user) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Invalid username or password');
     }
 
     if(await bcrypt.compare(loginInfo.password, user.password)) { 
@@ -41,7 +41,7 @@ export class AuthService {
     }
 
     else {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Invalid username or password');
     }
   }
 
