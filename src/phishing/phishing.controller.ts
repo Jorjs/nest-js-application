@@ -11,8 +11,6 @@ import { ConfigService } from '@nestjs/config';
 
 @Controller('api/phishing')
 @ApiTags('Phishing')
-@UseGuards(AuthGuard('jwt'))
-@ApiBearerAuth('access-token')
 export class PhishingController {
   constructor(
         private readonly phishingService: PhishingService,
@@ -29,30 +27,34 @@ export class PhishingController {
     description: 'Returns the overall pishing attempts',
     type: [AttemptDto]
   })
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
   @Get()
   public async getAllPhishingAttempts(): Promise<AttemptDto[]> {
     return await this.phishingService.getAllPhishingAttempts();
   }
 
 
-  @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
     summary: 'Send phishing email for the specified email',
   })
   @ApiResponse({
-    status: HttpStatus.OK,
+    status: HttpStatus.CREATED,
   })
   @ApiBody({ type: EmailRequestDto })
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth('access-token')
   @Post()
-  public async sendEmail(@Body() emailDetailsDto: EmailRequestDto): Promise<any> {
+  public async sendEmail(@Body() emailDetailsDto: EmailRequestDto) {
     const url = this.configService.get<string>('EMAIL_API');
 
     const response = await firstValueFrom(
-      this.httpService.post(url!, emailDetailsDto)
+      this.httpService.post(url!, { email: emailDetailsDto.email })
     );
 
-    if (response.status === 200) {
-      return { message: 'Operation successful', statusCode: 200 }; 
+    if (response.status === 201) {
+      return { message: 'Operation successful', statusCode: 201 }; 
     } 
     
     else {
@@ -69,9 +71,8 @@ export class PhishingController {
     status: HttpStatus.CREATED,
   })
   @Get(':id')
-  public async updateAttemptStatus(@Param('id') id: string): Promise<any> {
+  public async updateAttemptStatus(@Param('id') id: string) {
     const objectId = new ObjectId(id);
-
     await this.phishingService.updateAttemptStatus(objectId);
 
     return { message: 'Operation successful', statusCode: 201 }; 
