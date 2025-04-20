@@ -13,7 +13,9 @@ export class PhishingRepository {
 
 
     public async getAll(): Promise<UsersAttemptsEntity[]> {
-        return await this.repository.find();
+        return this.repository.find({
+            order: { _id: 'DESC' },
+          });
     }
 
     public async updateStatus(_id: ObjectId): Promise<UpdateResult> {

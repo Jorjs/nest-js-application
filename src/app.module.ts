@@ -3,11 +3,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
-import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtStrategy } from './auth/strategy/jwt.strategy';
 import { PhishingModule } from './phishing/phishing.module';
 import { UsersAttemptsEntity } from './entities/user.attempts.entity';
+import { EventModule } from './event/event.module';
 
 @Module({
   imports: [ 
@@ -28,11 +28,11 @@ import { UsersAttemptsEntity } from './entities/user.attempts.entity';
       entities: [UserEntity, UsersAttemptsEntity],
       synchronize: true,
     }),
-    UserModule,
     AuthModule,
-    PhishingModule
+    PhishingModule,
+    EventModule
   ],
   controllers: [],
-  providers: [JwtStrategy ],
+  providers: [JwtStrategy],
 })
 export class AppModule {}

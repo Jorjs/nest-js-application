@@ -8,6 +8,7 @@ import { plainToInstance } from 'class-transformer';
 import { LoginResponseDto } from 'src/entities/dto/login.response.dto';
 import { UserDto } from 'src/entities/dto/user.dto';
 import * as bcrypt from 'bcrypt';
+import { jwtDto } from 'src/entities/dto/jwt.info.dto';
 
 
 @Injectable()
@@ -26,8 +27,8 @@ export class AuthService {
     }
 
     if(await bcrypt.compare(loginInfo.password, user.password)) { 
-      const payload =  {
-        sub: user._id, 
+      const payload: jwtDto =  {
+        sub: user._id.toString(), 
         email: user.email,
         username: user.username,
       }
@@ -58,7 +59,7 @@ export class AuthService {
 
     if(result) {
       const payload =  {
-        sub: result._id, 
+        sub: user._id.toString(), 
         email: result.email,
         username: result.username,
       }

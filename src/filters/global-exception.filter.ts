@@ -16,12 +16,9 @@ export class GlobalHttpExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
 
-    // If it's a known HttpException, just use Nest's status code & response
     if (exception instanceof HttpException) {
       const status = exception.getStatus();
       const exceptionResponse = exception.getResponse();
-      // Typically, this is a string or object. Nest's default would do this for you,
-      // but if you want to unify the shape, parse it here.
       this.logger.error(`HttpException thrown: `, exception.stack);
 
       response.status(status).json({

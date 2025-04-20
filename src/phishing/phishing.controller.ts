@@ -8,6 +8,7 @@ import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { ObjectId } from 'mongodb';
 import { ConfigService } from '@nestjs/config';
+import { EventGateway } from 'src/event/event.gateway';
 
 @Controller('api/phishing')
 @ApiTags('Phishing')
@@ -15,7 +16,8 @@ export class PhishingController {
   constructor(
         private readonly phishingService: PhishingService,
         private readonly httpService: HttpService,
-        private readonly configService: ConfigService
+        private readonly configService: ConfigService,
+        private readonly eventService: EventGateway
   ) {}
 
   @HttpCode(HttpStatus.OK)
@@ -54,8 +56,9 @@ export class PhishingController {
     );
 
     if (response.status === 201) {
+      this.eventService.sendMessage("new-attempt", response.data as AttemptDto);
       return { message: 'Operation successful', statusCode: 201 }; 
-    } 
+    }
     
     else {
       throw new Error(`Unexpected response status: ${response.status}`);
@@ -74,6 +77,7 @@ export class PhishingController {
   public async updateAttemptStatus(@Param('id') id: string) {
     const objectId = new ObjectId(id);
     await this.phishingService.updateAttemptStatus(objectId);
+    this.eventService.sendMessage("update-attempt", id);
 
     return { message: 'Operation successful', statusCode: 201 }; 
   }

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { AttemptDto } from 'src/entities/dto/attempt.dto';
 import { PhishingRepository } from './phishing.repository';
 import { plainToInstance } from 'class-transformer';
@@ -25,7 +25,7 @@ export class PhishingService {
       const attempts = await this.phishingRepository.updateStatus(id);
 
       if(attempts.affected == 0) {
-        throw new BadRequestException('Attempt id is invalid');
+        throw new NotFoundException('Attempt not found');
       }
 
       return; 

@@ -17,5 +17,9 @@ export class AttemptDto {
 
     @Expose()
     @ApiProperty()
-    userClicked: string;
+    userClicked: boolean;
+
+    @Expose()
+    @ApiProperty()
+    sent: boolean;
 } 

@@ -13,7 +13,10 @@ export class UsersAttemptsEntity {
     @Column()
     emailContent: string
 
-    @Column()
+    @Column({default: false})
     userClicked: boolean
+
+    @Column({default: false})
+    sent: boolean;
 
 }

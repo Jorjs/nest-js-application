@@ -1,11 +1,11 @@
 export class jwtUserDto {
-    id: number;
+    id: string;
     username: string;
     email: string;
 } 
 
 export class jwtDto {
-    sub: number;
+    sub: string;
     username: string;
     email: string;
 } 
